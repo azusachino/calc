@@ -8,7 +8,7 @@ class Solution
 public:
     string removeKdigits(string num, int k)
     {
-        if (num.length() == k)
+        if (k >= num.length())
             return "0";
 
         string ans;

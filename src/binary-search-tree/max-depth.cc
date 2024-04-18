@@ -1,4 +1,5 @@
 #include "tree.h"
+#include <algorithm>
 
 class Solution
 {
@@ -9,6 +10,6 @@ public:
         {
             return 0;
         }
-        return 1 + max(maxDepth(root->left), maxDepth(root->right));
+        return 1 + std::max(maxDepth(root->left), maxDepth(root->right));
     }
 };

@@ -9,7 +9,7 @@ public:
     int removeCoveredIntervals(vector<vector<int>> &intervals)
     {
         int cnt = 0, left = -1, right = -1;
-        std::sort(intervals.begin(), intervals.end());
+        sort(intervals.begin(), intervals.end());
 
         for (auto &v : intervals)
         {
