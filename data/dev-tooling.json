@@ -1,0 +1,63 @@
+{
+  "title": "Dev Tooling: uv, Rust & Nix",
+  "mode": "practice",
+  "method": "agent",
+  "status": "active",
+  "course": "tooling",
+  "objectives": ["uv", "nix", "conventional-commits"],
+  "description": "Drawn from the owner's working environment: uv-managed Python, Nix-first devShells, conventional commits.",
+  "questions": [
+    {
+      "kind": "mc",
+      "prompt": "Which set of classic tools does `uv` aim to replace?",
+      "payload": {
+        "options": [
+          "pip, venv, pipx, and poetry",
+          "cargo and rustup",
+          "make and cmake",
+          "git and gh"
+        ],
+        "correct_index": 0
+      },
+      "explanation": "uv is a single fast Python runtime + dependency + project manager covering pip/venv/pipx/poetry workflows.",
+      "tags": ["uv", "python"],
+      "points": 1
+    },
+    {
+      "kind": "tf",
+      "prompt": "`uv run script.py` will auto-resolve and install the script's dependencies before running it.",
+      "payload": { "correct": true },
+      "explanation": "uv resolves the project/inline dependencies into the environment, then executes the script.",
+      "tags": ["uv"],
+      "points": 1
+    },
+    {
+      "kind": "short",
+      "prompt": "Under Conventional Commits, what type prefix labels a bug fix?",
+      "payload": {
+        "accepted": ["fix", "fix:"],
+        "normalize": "exact",
+        "judge": "exact"
+      },
+      "explanation": "`fix:` marks a bug fix; `feat:` a feature; `chore:` maintenance.",
+      "tags": ["conventional-commits"],
+      "points": 1
+    },
+    {
+      "kind": "mc",
+      "prompt": "In a Nix-first setup, where are project CLI tools expected to come from?",
+      "payload": {
+        "options": [
+          "The project devShell (nix develop)",
+          "A global pip install",
+          "Homebrew only",
+          "Vendored binaries in the repo"
+        ],
+        "correct_index": 0
+      },
+      "explanation": "Nix-first: tools come from the devShell; `mise` is reserved for language runtimes only.",
+      "tags": ["nix"],
+      "points": 1
+    }
+  ]
+}
