@@ -1,0 +1,124 @@
+{
+  "title": "Challenge — PostgreSQL Internals & Concurrency",
+  "mode": "practice",
+  "method": "agent",
+  "status": "active",
+  "course": "database",
+  "objectives": ["postgres", "database", "concurrency"],
+  "description": "Harder follow-up: isolation anomalies, MVCC maintenance, the planner, indexing strategy, and locking. Assumes the fundamentals deck.",
+  "questions": [
+    {
+      "kind": "mc",
+      "prompt": "Two transactions each read an overlapping set, then update disjoint rows, together breaking an invariant neither saw violated. This anomaly — and the PostgreSQL level that prevents it — are:",
+      "payload": {
+        "options": [
+          "Write skew; SERIALIZABLE",
+          "Phantom read; READ COMMITTED",
+          "Dirty write; REPEATABLE READ",
+          "Lost update; READ UNCOMMITTED"
+        ],
+        "correct_index": 0
+      },
+      "explanation": "Write skew slips past snapshot isolation (REPEATABLE READ); only SERIALIZABLE (SSI) detects the dangerous read/write dependency and aborts one transaction.",
+      "tags": ["postgres", "isolation", "concurrency"],
+      "points": 2
+    },
+    {
+      "kind": "mc",
+      "prompt": "Autovacuum's 'freeze' work exists primarily to prevent:",
+      "payload": {
+        "options": [
+          "Index bloat",
+          "Transaction ID (XID) wraparound",
+          "Connection exhaustion",
+          "WAL corruption"
+        ],
+        "correct_index": 1
+      },
+      "explanation": "XIDs are 32-bit and cyclic; freezing marks old tuples as permanently visible so the counter can wrap without rows appearing to come from the future.",
+      "tags": ["postgres", "mvcc"],
+      "points": 2
+    },
+    {
+      "kind": "mc",
+      "prompt": "An index-only scan can skip heap fetches only when:",
+      "payload": {
+        "options": [
+          "The table has no primary key",
+          "The query runs in a read-only transaction",
+          "The visibility map marks the page all-visible and the index has every needed column",
+          "work_mem is large enough to sort the result"
+        ],
+        "correct_index": 2
+      },
+      "explanation": "Without all-visible pages Postgres must visit the heap to check tuple visibility, defeating the index-only optimization.",
+      "tags": ["postgres", "indexing", "planner"],
+      "points": 2
+    },
+    {
+      "kind": "mc",
+      "prompt": "In EXPLAIN ANALYZE, a large gap between estimated rows and actual rows most often points to:",
+      "payload": {
+        "options": [
+          "A missing LIMIT clause",
+          "Stale or insufficient planner statistics",
+          "An uncommitted transaction",
+          "A disabled JIT"
+        ],
+        "correct_index": 1
+      },
+      "explanation": "The planner estimates from pg_statistic; stale stats (run ANALYZE) or correlated columns (extended statistics) cause big misestimates and bad plans.",
+      "tags": ["postgres", "planner"],
+      "points": 2
+    },
+    {
+      "kind": "short",
+      "prompt": "Which SQL construct computes a running total across rows without collapsing them into groups?",
+      "payload": {
+        "accepted": ["window function", "window", "over", "over clause"],
+        "normalize": "exact",
+        "judge": "exact"
+      },
+      "explanation": "A window function with an OVER clause (e.g. SUM(...) OVER (ORDER BY ...)) keeps every row while aggregating.",
+      "tags": ["database", "sql"],
+      "points": 1
+    },
+    {
+      "kind": "code",
+      "prompt": "Given sales(day date, amount numeric), write SQL for a 7-day trailing running total of amount per day, ordered by day.",
+      "payload": {
+        "language": "sql",
+        "exemplar": "SELECT day,\n       SUM(amount) OVER (\n         ORDER BY day\n         ROWS BETWEEN 6 PRECEDING AND CURRENT ROW\n       ) AS trailing_7d\nFROM sales\nORDER BY day;"
+      },
+      "explanation": "A framed window (ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) gives the trailing 7-row sum. Graded manually.",
+      "tags": ["postgres", "sql", "window-functions"],
+      "points": 3
+    },
+    {
+      "kind": "mc",
+      "prompt": "SELECT ... FOR UPDATE acquires which lock?",
+      "payload": {
+        "options": [
+          "An exclusive row-level lock on the selected rows",
+          "A table-level ACCESS EXCLUSIVE lock",
+          "A shared ACCESS SHARE lock only",
+          "An advisory session lock"
+        ],
+        "correct_index": 0
+      },
+      "explanation": "FOR UPDATE takes exclusive row locks so concurrent FOR UPDATE / UPDATE on the same rows block until commit.",
+      "tags": ["postgres", "locking"],
+      "points": 2
+    },
+    {
+      "kind": "essay",
+      "prompt": "Explain when a covering index (B-tree with INCLUDE columns) outperforms a plain composite index, and the cost you accept on the write path.",
+      "payload": {
+        "rubric": "Notes INCLUDE payloads enable index-only scans without widening the key (no extra sort/uniqueness semantics); acknowledges larger index + more write/VACUUM amplification."
+      },
+      "explanation": "Open response — pending attempt, resolved via attempt.grade.",
+      "tags": ["postgres", "indexing"],
+      "points": 3
+    }
+  ]
+}

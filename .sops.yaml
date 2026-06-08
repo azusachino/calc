@@ -1,0 +1,8 @@
+# sops encrypts secrets.env to every recipient below. To onboard a new device:
+#   1. on that device: make age-key   (prints its public key)
+#   2. add the printed key to `age:` here, commit
+#   3. on a device that can already decrypt: make reseal   (re-encrypts to all)
+creation_rules:
+  - path_regex: \.env$
+    age: >-
+      age17dy97z4yszskndy7laqaejlvsw3tp6pcg28p032002ckr04vtyhsvzd7x2
