@@ -10,7 +10,12 @@ project.
 | --- | --- |
 | `client.py` | Dependency-free AME agent client. Every tool dispatches through `POST /v1/agents/run`. Sends a normal `User-Agent` so Cloudflare doesn't 403 it. |
 | `replay.py` | Imports `data/*.json` seed assessments (validates the data-model rules first). |
+| `grade.py` | Lists pending `essay`/`code` attempts and grades them via `attempt.grade`. |
 | `data/*.json` | Raw, replayable assessment seeds — each file is one `assessment.create` payload with inline questions. |
+
+The workflow end to end: **mint** (`data/*.json`) → **publish** (`make replay`) →
+take the assessment in the AME UI → **grade** pending essay/code (`make grade`) →
+**analyze** (`make call TOOL=assessment.stats PARAMS='{"id":"..."}'`).
 
 ## Secrets across devices (sops + age)
 

@@ -4,7 +4,7 @@ export
 
 UV ?= uv
 
-.PHONY: help install check dry-run replay call clean age-key seal unseal reseal
+.PHONY: help install check dry-run replay call grade clean age-key seal unseal reseal
 
 help: ## List targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | \
@@ -14,7 +14,7 @@ install: ## Sync the uv environment from the lockfile
 	$(UV) sync
 
 check: ## Compile sources and validate seed data (no network)
-	$(UV) run python -m py_compile client.py replay.py main.py
+	$(UV) run python -m py_compile client.py replay.py grade.py main.py
 	$(UV) run replay.py --dry-run
 
 dry-run: ## Validate + preview seed import without sending
@@ -25,6 +25,9 @@ replay: guard-token ## Import every data/*.json into AME
 
 call: guard-token ## Call one tool: make call TOOL=stats.user [PARAMS='{"k":1}']
 	$(UV) run client.py $(TOOL) $(PARAMS)
+
+grade: guard-token ## List pending attempts, or grade one: make grade ARGS="<id> 0.8 notes"
+	$(UV) run grade.py $(ARGS)
 
 guard-token:
 	@test -n "$(AME_TOKEN)" || { \
