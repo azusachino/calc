@@ -1,0 +1,139 @@
+{
+  "title": "Algorithms to Live By (Christian & Griffiths) — Applied",
+  "mode": "practice",
+  "method": "agent",
+  "status": "active",
+  "course": "cs",
+  "objectives": ["cs", "decision-making", "algorithms"],
+  "description": "Self-study deck on 'Algorithms to Live By': optimal stopping, explore/exploit, caching, scheduling, Bayes, overfitting, and backoff — computer science as life advice.",
+  "questions": [
+    {
+      "kind": "mc",
+      "prompt": "In optimal stopping (the 'secretary problem'), the look-then-leap rule says: observe and reject roughly what fraction, then take the next candidate better than all seen so far?",
+      "payload": {
+        "options": ["25%", "37%", "50%", "63%"],
+        "correct_index": 1
+      },
+      "explanation": "1/e ≈ 37% — spend the first 37% calibrating, then commit to the next record-beater.",
+      "tags": ["cs", "optimal-stopping"],
+      "points": 1
+    },
+    {
+      "kind": "mc",
+      "prompt": "The explore/exploit trade-off is formalized in computer science as the ___ problem.",
+      "payload": {
+        "options": ["multi-armed bandit", "travelling salesman", "knapsack", "halting"],
+        "correct_index": 0
+      },
+      "explanation": "Multi-armed bandits model when to try new options (explore) vs stick with the best known (exploit).",
+      "tags": ["cs", "explore-exploit"],
+      "points": 1
+    },
+    {
+      "kind": "mc",
+      "prompt": "According to the book, how much you should explore versus exploit depends most on:",
+      "payload": {
+        "options": [
+          "How much time or how many tries remain",
+          "Your current mood",
+          "The number of competitors",
+          "The size of the dataset only"
+        ],
+        "correct_index": 0
+      },
+      "explanation": "Explore more when much future remains; exploit as the interval shrinks — 'be optimistic when young.'",
+      "tags": ["cs", "explore-exploit"],
+      "points": 1
+    },
+    {
+      "kind": "short",
+      "prompt": "The caching eviction policy that discards the least-recently-used item is abbreviated ___.",
+      "payload": {
+        "accepted": ["LRU", "lru", "least recently used"],
+        "normalize": "exact",
+        "judge": "exact"
+      },
+      "explanation": "LRU approximates the unbeatable-but-clairvoyant 'evict what we'll need furthest in the future.'",
+      "tags": ["cs", "caching"],
+      "points": 1
+    },
+    {
+      "kind": "mc",
+      "prompt": "To minimize the MAXIMUM lateness across a set of tasks with due dates, schedule them by:",
+      "payload": {
+        "options": [
+          "Earliest Due Date",
+          "Shortest Processing Time",
+          "Longest Processing Time",
+          "Random order"
+        ],
+        "correct_index": 0
+      },
+      "explanation": "Earliest Due Date minimizes the maximum lateness — handle whatever is due soonest first.",
+      "tags": ["cs", "scheduling"],
+      "points": 1
+    },
+    {
+      "kind": "mc",
+      "prompt": "To minimize the SUM of completion times (clear the most tasks soonest), schedule by:",
+      "payload": {
+        "options": [
+          "Shortest Processing Time first",
+          "Earliest Due Date",
+          "Most important first",
+          "First come, first served"
+        ],
+        "correct_index": 0
+      },
+      "explanation": "Shortest Processing Time first minimizes total/average completion time — weight by importance/time for a priority version.",
+      "tags": ["cs", "scheduling"],
+      "points": 1
+    },
+    {
+      "kind": "tf",
+      "prompt": "Under Bayes's rule, when you have very little data your prior assumptions dominate the estimate.",
+      "payload": { "correct": true },
+      "explanation": "Sparse evidence leans on the prior; data progressively overrides it as it accumulates.",
+      "tags": ["cs", "bayes"],
+      "points": 1
+    },
+    {
+      "kind": "mc",
+      "prompt": "The book's antidote to overfitting is to:",
+      "payload": {
+        "options": [
+          "Favor simpler models and stop training earlier",
+          "Add as many parameters as possible",
+          "Always fit the training data exactly",
+          "Ignore cross-validation"
+        ],
+        "correct_index": 0
+      },
+      "explanation": "Penalize complexity and use early stopping; fitting noise generalizes worse than a simpler model.",
+      "tags": ["cs", "overfitting"],
+      "points": 1
+    },
+    {
+      "kind": "short",
+      "prompt": "When a shared network is congested, the proven strategy of waiting random, doubling intervals before retrying is called exponential ___.",
+      "payload": {
+        "accepted": ["backoff", "back-off", "exponential backoff"],
+        "normalize": "exact",
+        "judge": "exact"
+      },
+      "explanation": "Exponential backoff spaces retries to relieve congestion instead of worsening it.",
+      "tags": ["cs", "networking"],
+      "points": 1
+    },
+    {
+      "kind": "essay",
+      "prompt": "Apply explore/exploit to a concrete decision in your life (where to eat, which projects to take). Explain why the right balance shifts as your remaining time horizon changes.",
+      "payload": {
+        "rubric": "Picks a real decision; argues explore-heavy early (long horizon, info has time to pay off) and exploit-heavy late; bonus for naming regret/UCB-style 'optimism.'"
+      },
+      "explanation": "Open response — pending attempt, resolved via attempt.grade.",
+      "tags": ["cs", "application"],
+      "points": 2
+    }
+  ]
+}

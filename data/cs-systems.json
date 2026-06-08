@@ -1,0 +1,135 @@
+{
+  "title": "CS Fundamentals — Systems, Complexity & Networks",
+  "mode": "practice",
+  "method": "agent",
+  "status": "active",
+  "course": "cs",
+  "objectives": ["cs", "systems"],
+  "description": "Broad CS fundamentals: complexity, memory hierarchy, concurrency, OS, networking, and distributed-systems trade-offs.",
+  "questions": [
+    {
+      "kind": "mc",
+      "prompt": "Binary search over a sorted array of n elements has worst-case time complexity:",
+      "payload": {
+        "options": ["O(log n)", "O(n)", "O(n log n)", "O(1)"],
+        "correct_index": 0
+      },
+      "explanation": "Each comparison halves the search space, giving logarithmic time.",
+      "tags": ["cs", "complexity"],
+      "points": 1
+    },
+    {
+      "kind": "mc",
+      "prompt": "Within a single process, multiple threads share which of the following?",
+      "payload": {
+        "options": [
+          "The address space and heap (but each has its own stack)",
+          "Nothing — fully isolated",
+          "Only the registers",
+          "Separate heaps, shared stacks"
+        ],
+        "correct_index": 0
+      },
+      "explanation": "Threads share the process's address space and heap; each thread keeps its own stack and registers.",
+      "tags": ["cs", "concurrency", "os"],
+      "points": 2
+    },
+    {
+      "kind": "tf",
+      "prompt": "TCP provides ordered, reliable byte-stream delivery, whereas UDP does not guarantee ordering or delivery.",
+      "payload": { "correct": true },
+      "explanation": "TCP adds sequencing, acknowledgements, and retransmission; UDP is a thin, best-effort datagram layer.",
+      "tags": ["cs", "networking"],
+      "points": 1
+    },
+    {
+      "kind": "mc",
+      "prompt": "Under the CAP theorem, during a network partition a distributed system must trade off between:",
+      "payload": {
+        "options": [
+          "Consistency and Availability",
+          "Cost and Performance",
+          "Latency and Throughput",
+          "Security and Usability"
+        ],
+        "correct_index": 0
+      },
+      "explanation": "When partitioned (P is unavoidable), you choose C or A — reject/stall to stay consistent, or answer possibly-stale to stay available.",
+      "tags": ["cs", "distributed"],
+      "points": 2
+    },
+    {
+      "kind": "short",
+      "prompt": "The smallest, fastest CPU cache level nearest the core is named ___.",
+      "payload": {
+        "accepted": ["L1", "l1", "level 1"],
+        "normalize": "exact",
+        "judge": "exact"
+      },
+      "explanation": "L1 is fastest/smallest, then L2, then a larger shared L3 — the memory hierarchy trades size for speed.",
+      "tags": ["cs", "architecture"],
+      "points": 1
+    },
+    {
+      "kind": "mc",
+      "prompt": "Virtual-to-physical address translation is performed using a:",
+      "payload": {
+        "options": ["Page table (cached by the TLB)", "Stack frame", "Symbol table", "Routing table"],
+        "correct_index": 0
+      },
+      "explanation": "The OS maintains page tables; the TLB caches recent translations to avoid repeated walks.",
+      "tags": ["cs", "os", "memory"],
+      "points": 2
+    },
+    {
+      "kind": "mc",
+      "prompt": "Deadlock requires all four Coffman conditions. Which is one of them?",
+      "payload": {
+        "options": [
+          "Circular wait",
+          "Round-robin scheduling",
+          "Garbage collection",
+          "Write-ahead logging"
+        ],
+        "correct_index": 0
+      },
+      "explanation": "Mutual exclusion, hold-and-wait, no preemption, and circular wait must all hold; breaking any one prevents deadlock.",
+      "tags": ["cs", "concurrency"],
+      "points": 2
+    },
+    {
+      "kind": "mc",
+      "prompt": "On-disk database indexes are usually B-trees / B+ trees because they:",
+      "payload": {
+        "options": [
+          "Have high fan-out and shallow depth, minimizing disk seeks",
+          "Use the least RAM of any structure",
+          "Are simpler than a linked list",
+          "Avoid all sorting"
+        ],
+        "correct_index": 0
+      },
+      "explanation": "High branching keeps the tree shallow, so a lookup touches few pages — ideal when each page access is a slow seek.",
+      "tags": ["cs", "database"],
+      "points": 2
+    },
+    {
+      "kind": "tf",
+      "prompt": "Two's complement is the standard binary encoding for signed integers on modern CPUs.",
+      "payload": { "correct": true },
+      "explanation": "Two's complement gives a single zero and lets the same adder handle signed and unsigned addition.",
+      "tags": ["cs", "architecture"],
+      "points": 1
+    },
+    {
+      "kind": "essay",
+      "prompt": "Explain why adding more threads can make a program slower rather than faster, citing at least two causes.",
+      "payload": {
+        "rubric": "Names ≥2 of: lock contention, context-switch/scheduling overhead, cache-line/false sharing, Amdahl's law limiting the serial fraction, memory-bandwidth saturation."
+      },
+      "explanation": "Open response — pending attempt, resolved via attempt.grade.",
+      "tags": ["cs", "concurrency"],
+      "points": 3
+    }
+  ]
+}
