@@ -21,8 +21,14 @@ take the assessment in the AME UI → **grade** pending essay/code (`make grade`
 
 The token never enters git in plaintext. `secrets.env` (encrypted) is committed;
 `.env` (decrypted) is gitignored. Each device holds its own age private key
-outside the repo (`~/Library/Application Support/sops/age/keys.txt` on macOS);
-`.sops.yaml` lists every device's public key as a recipient.
+outside the repo, at `$XDG_CONFIG_HOME/sops/age/keys.txt` (falling back to
+`~/.config/sops/age/keys.txt`) — the path sops reads and the one `make age-key`
+writes. `.sops.yaml` lists every device's public key as a recipient.
+
+> macOS note: sops only uses `~/Library/Application Support/sops/age/keys.txt`
+> when `XDG_CONFIG_HOME` is unset. If your shell exports it (common with
+> nix/fish), keep the key under `$XDG_CONFIG_HOME` or `make unseal` fails with
+> "did not find keys".
 
 First device (you have the token):
 

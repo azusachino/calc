@@ -39,7 +39,7 @@ clean: ## Remove caches
 # --- secrets (sops + age) -------------------------------------------------
 # secrets.env (encrypted) is committed; .env (plaintext) is gitignored.
 age-key: ## Generate this device's age key and print its public recipient
-	@KF="$$HOME/Library/Application Support/sops/age/keys.txt"; \
+	@KF="$${XDG_CONFIG_HOME:-$$HOME/.config}/sops/age/keys.txt"; \
 		mkdir -p "$$(dirname "$$KF")"; \
 		[ -f "$$KF" ] || age-keygen -o "$$KF"; \
 		echo "add this recipient to .sops.yaml:"; age-keygen -y "$$KF"
