@@ -6,10 +6,12 @@ optionally `status: "active"` to publish in a single call). Replaying is just
 dispatching `assessment.create` for each file, so the data is the source of
 truth and the import is reproducible.
 
+Seed files live under data/<course>/*.json (the dir is scanned recursively).
+
 Usage:
     uv run replay.py --dry-run            # validate + print, no network
-    AME_TOKEN=... uv run replay.py        # import every data/*.json
-    AME_TOKEN=... uv run replay.py data/arrays-two-pointers.json
+    AME_TOKEN=... uv run replay.py        # import every data/**/*.json
+    AME_TOKEN=... uv run replay.py data/leetcode/arrays-two-pointers.json
 """
 
 from __future__ import annotations
@@ -59,7 +61,7 @@ def validate(payload: dict, path: Path) -> list[str]:
 
 def files(args: list[str]) -> list[Path]:
     paths = [Path(a) for a in args if not a.startswith("-")]
-    return sorted(paths) if paths else sorted(DATA_DIR.glob("*.json"))
+    return sorted(paths) if paths else sorted(DATA_DIR.rglob("*.json"))
 
 
 def main(argv: list[str]) -> int:

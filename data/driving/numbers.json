@@ -1,0 +1,216 @@
+{
+  "title": "運転免許 本試験 — 数字（速度・距離・時間・年齢）",
+  "mode": "practice",
+  "method": "agent",
+  "status": "active",
+  "course": "driving",
+  "objectives": ["数字", "速度", "距離", "年齢", "本免", "学科試験"],
+  "description": "普通自動車 本免（学科試験）対策の○×・選択デッキ。テーマは試験でよく問われる数字（速度・距離・時間・年齢）。○×の答えは○と×をほぼ半々にし、×は数字を入れ替えたひっかけにしてある。数値は改正されることがあるため最新の交通教本で確認すること。",
+  "questions": [
+    {
+      "kind": "tf",
+      "prompt": "最高速度の標識がない一般道路での、普通自動車の法定最高速度は時速60kmである。",
+      "payload": { "correct": true },
+      "explanation": "指定のない一般道路での普通自動車の法定最高速度は60km/h。",
+      "tags": ["速度"],
+      "points": 1
+    },
+    {
+      "kind": "tf",
+      "prompt": "高速自動車国道の本線車道での最低速度は、時速40kmである。",
+      "payload": { "correct": false },
+      "explanation": "最低速度は50km/h（40kmは誤り）。",
+      "tags": ["速度", "高速道路"],
+      "points": 1
+    },
+    {
+      "kind": "tf",
+      "prompt": "一般道路での原動機付自転車（原付）の法定最高速度は時速30kmである。",
+      "payload": { "correct": true },
+      "explanation": "原付の法定最高速度は30km/h。",
+      "tags": ["速度", "原付"],
+      "points": 1
+    },
+    {
+      "kind": "tf",
+      "prompt": "高速自動車国道の本線車道での、普通乗用車の法定最高速度は時速80kmである。",
+      "payload": { "correct": false },
+      "explanation": "普通乗用車の法定最高速度は100km/h（80kmは誤り）。",
+      "tags": ["速度", "高速道路"],
+      "points": 1
+    },
+    {
+      "kind": "mc",
+      "prompt": "交差点とその端から何メートル以内が駐停車禁止か。",
+      "payload": {
+        "options": ["3m", "5m", "10m", "15m"],
+        "correct_index": 1
+      },
+      "explanation": "交差点とその端から5m以内は駐停車禁止。",
+      "tags": ["距離", "駐停車"],
+      "points": 1
+    },
+    {
+      "kind": "tf",
+      "prompt": "踏切とその端から前後10m以内は、駐車も停車も禁止である。",
+      "payload": { "correct": true },
+      "explanation": "踏切とその端から前後10m以内は駐停車禁止。",
+      "tags": ["距離", "駐停車", "踏切"],
+      "points": 1
+    },
+    {
+      "kind": "tf",
+      "prompt": "バスの停留所の標示柱から30m以内は、運行時間中は駐停車禁止である。",
+      "payload": { "correct": false },
+      "explanation": "バス停の標示柱から10m以内が運行時間中の駐停車禁止（30mは誤り）。",
+      "tags": ["距離", "駐停車"],
+      "points": 1
+    },
+    {
+      "kind": "mc",
+      "prompt": "駐車場や車庫などの出入口から何メートル以内が駐車禁止か。",
+      "payload": {
+        "options": ["3m", "5m", "1m", "10m"],
+        "correct_index": 0
+      },
+      "explanation": "駐車場・車庫などの出入口から3m以内は駐車禁止。",
+      "tags": ["距離", "駐停車"],
+      "points": 1
+    },
+    {
+      "kind": "tf",
+      "prompt": "火災報知機から5m以内は駐車が禁止されている。",
+      "payload": { "correct": false },
+      "explanation": "火災報知機から1m以内が駐車禁止（5mは誤り。消火栓などが5m）。",
+      "tags": ["距離", "駐停車"],
+      "points": 1
+    },
+    {
+      "kind": "tf",
+      "prompt": "消火栓や防火水槽の取り入れ口などから5m以内は、駐車が禁止されている。",
+      "payload": { "correct": true },
+      "explanation": "消火栓・指定消防水利・防火水槽の取り入れ口などから5m以内は駐車禁止。",
+      "tags": ["距離", "駐停車"],
+      "points": 1
+    },
+    {
+      "kind": "mc",
+      "prompt": "車を駐車したとき、道路の右側に少なくともどれだけの余地がなければ駐車できないか。",
+      "payload": {
+        "options": ["2.5m", "3.0m", "3.5m", "4.0m"],
+        "correct_index": 2
+      },
+      "explanation": "車の右側に3.5m以上の余地がとれない場所では、原則として駐車できない。",
+      "tags": ["距離", "駐停車"],
+      "points": 1
+    },
+    {
+      "kind": "tf",
+      "prompt": "交差点とその手前から30m以内は、追い越しが禁止されている（優先道路を通行している場合を除く）。",
+      "payload": { "correct": true },
+      "explanation": "交差点とその手前30m以内は追い越し禁止（優先道路通行中を除く）。",
+      "tags": ["距離", "追い越し"],
+      "points": 1
+    },
+    {
+      "kind": "tf",
+      "prompt": "横断歩道や自転車横断帯で追い越し・追い抜きが禁止されるのは、その手前10m以内に限られる。",
+      "payload": { "correct": false },
+      "explanation": "横断歩道・自転車横断帯の追い越し・追い抜き禁止は手前30m以内まで及ぶ。10mに限られない。",
+      "tags": ["距離", "追い越し"],
+      "points": 1
+    },
+    {
+      "kind": "mc",
+      "prompt": "右折・左折・転回をするときは、その行為をしようとする地点の手前何メートルで合図を始めるか。",
+      "payload": {
+        "options": ["30m", "20m", "10m", "50m"],
+        "correct_index": 0
+      },
+      "explanation": "右左折・転回の合図は、その地点の30m手前で出す。",
+      "tags": ["距離", "合図"],
+      "points": 1
+    },
+    {
+      "kind": "tf",
+      "prompt": "進路変更をするときは、進路を変えようとする約3秒前に合図を出す。",
+      "payload": { "correct": true },
+      "explanation": "進路変更の合図は、変えようとする約3秒前。",
+      "tags": ["時間", "合図"],
+      "points": 1
+    },
+    {
+      "kind": "tf",
+      "prompt": "チャイルドシートは、8歳未満の幼児に使用しなければならない。",
+      "payload": { "correct": false },
+      "explanation": "チャイルドシートの使用義務は6歳未満（8歳は誤り）。",
+      "tags": ["年齢"],
+      "points": 1
+    },
+    {
+      "kind": "mc",
+      "prompt": "普通自動車を運転できる普通免許は、何歳から取得できるか。",
+      "payload": {
+        "options": ["16歳", "18歳", "20歳", "21歳"],
+        "correct_index": 1
+      },
+      "explanation": "普通免許は18歳以上で取得できる。",
+      "tags": ["年齢"],
+      "points": 1
+    },
+    {
+      "kind": "tf",
+      "prompt": "初心運転者標識（初心者マーク）は、免許を受けてから2年間表示する義務がある。",
+      "payload": { "correct": false },
+      "explanation": "初心者マークの表示義務は免許取得後1年間（2年は誤り）。",
+      "tags": ["時間", "標識義務"],
+      "points": 1
+    },
+    {
+      "kind": "tf",
+      "prompt": "高齢運転者標識を付けるよう努めなければならないのは、70歳以上の運転者である。",
+      "payload": { "correct": true },
+      "explanation": "70歳以上の運転者は高齢運転者標識の表示が努力義務。",
+      "tags": ["年齢", "標識義務"],
+      "points": 1
+    },
+    {
+      "kind": "mc",
+      "prompt": "仮運転免許の有効期間は何か月か。",
+      "payload": {
+        "options": ["3か月", "6か月", "12か月", "24か月"],
+        "correct_index": 1
+      },
+      "explanation": "仮運転免許の有効期間は6か月。",
+      "tags": ["時間"],
+      "points": 1
+    },
+    {
+      "kind": "tf",
+      "prompt": "人の乗り降りや、5分以内の荷物の積みおろしのための停止は「停車」となる。",
+      "payload": { "correct": true },
+      "explanation": "人の乗降や5分以内の荷物の積卸しは停車。これを超える待機などは駐車。",
+      "tags": ["時間", "駐停車"],
+      "points": 1
+    },
+    {
+      "kind": "mc",
+      "prompt": "夜間、走行用前照灯（上向き）で障害物を確認できるのは、前方およそ何メートルか。",
+      "payload": {
+        "options": ["40m", "100m", "200m", "300m"],
+        "correct_index": 1
+      },
+      "explanation": "走行用前照灯（上向き）は前方約100m、すれ違い用（下向き）は前方約40mの障害物を確認できるようにされている。",
+      "tags": ["距離", "灯火"],
+      "points": 1
+    },
+    {
+      "kind": "tf",
+      "prompt": "すれ違い用前照灯（下向き）では、前方およそ40m先の障害物を確認できるようにされている。",
+      "payload": { "correct": true },
+      "explanation": "すれ違い用前照灯は前方約40m先を確認できる（走行用は約100m）。",
+      "tags": ["距離", "灯火"],
+      "points": 1
+    }
+  ]
+}

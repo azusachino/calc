@@ -7,9 +7,12 @@ Single door: every tool dispatches through POST /v1/agents/run with
 GOTCHA: the host is Cloudflare-fronted and 403s python-urllib's default
 User-Agent ("error code: 1010"), so we always send a normal UA.
 
+Reads AME_TOKEN from the environment or from a local .env (auto-loaded via
+load_dotenv(), so no `set -a; source .env` needed).
+
 Usage:
-    AME_TOKEN=<id>_<secret> uv run client.py stats.user
-    AME_TOKEN=... uv run client.py assessment.list '{"status":"active"}'
+    uv run client.py stats.user
+    uv run client.py assessment.list '{"status":"active"}'
 """
 
 from __future__ import annotations
@@ -19,6 +22,7 @@ import os
 import sys
 import urllib.error
 import urllib.request
+from pathlib import Path
 
 DEFAULT_API = "https://ame.azusachino.icu"
 USER_AGENT = "curl/8.7.1"  # anything non-urllib gets past Cloudflare rule 1010
@@ -63,7 +67,31 @@ class AmeClient:
         return body.get("result", {})
 
 
+def load_dotenv(path: Path | None = None) -> None:
+    """Populate os.environ from a .env file (dependency-free; real env wins).
+
+    Lets every script that calls from_env() pick up AME_TOKEN without a manual
+    `set -a; source .env`. Supports `KEY=val`, `export KEY=val`, # comments, and
+    surrounding single/double quotes.
+    """
+    path = path or Path(__file__).parent / ".env"
+    try:
+        text = path.read_text()
+    except OSError:
+        return  # no .env — rely on the real environment (e.g. make exports it)
+    for line in text.splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        line = line.removeprefix("export ").lstrip()
+        key, sep, val = line.partition("=")
+        if not sep:
+            continue
+        os.environ.setdefault(key.strip(), val.strip().strip("\"'"))
+
+
 def from_env() -> AmeClient:
+    load_dotenv()
     return AmeClient(os.environ.get("AME_TOKEN", ""), os.environ.get("AME_API", DEFAULT_API))
 
 
