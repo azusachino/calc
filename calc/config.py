@@ -1,0 +1,10 @@
+"""Small defaults intended to run on a laptop CPU."""
+
+BATCH_SIZE = 32
+BLOCK_SIZE = 64
+EMBEDDING_SIZE = 64
+NUM_HEADS = 4
+NUM_LAYERS = 2
+DROPOUT = 0.1
+STEPS = 1000
+LEARNING_RATE = 3e-4
