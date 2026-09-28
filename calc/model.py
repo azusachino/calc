@@ -10,18 +10,30 @@ class CausalSelfAttention(nn.Module):
         super().__init__()
         if embedding_size % num_heads:
             raise ValueError("embedding_size must be divisible by num_heads")
-        self.attention = nn.MultiheadAttention(
-            embedding_size, num_heads, dropout=dropout, batch_first=True
-        )
-        self.dropout = nn.Dropout(dropout)
+        self.num_heads = num_heads
+        self.head_size = embedding_size // num_heads
+        self.qkv = nn.Linear(embedding_size, 3 * embedding_size)
+        self.projection = nn.Linear(embedding_size, embedding_size)
+        self.attention_dropout = nn.Dropout(dropout)
+        self.output_dropout = nn.Dropout(dropout)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        length = x.size(1)
-        mask = torch.triu(
+        batch, length, embedding_size = x.shape
+        # Project each token to queries, keys, and values, then split into heads.
+        qkv = self.qkv(x).view(batch, length, 3, self.num_heads, self.head_size)
+        query, key, value = qkv.permute(2, 0, 3, 1, 4).unbind(0)
+
+        # Similarity scores are scaled to keep softmax gradients well behaved.
+        scores = query @ key.transpose(-2, -1) * self.head_size**-0.5
+        future = torch.triu(
             torch.ones(length, length, dtype=torch.bool, device=x.device), diagonal=1
         )
-        result, _ = self.attention(x, x, x, attn_mask=mask, need_weights=False)
-        return self.dropout(result)
+        scores = scores.masked_fill(future, float("-inf"))
+        weights = self.attention_dropout(scores.softmax(dim=-1))
+
+        attended = weights @ value
+        attended = attended.transpose(1, 2).contiguous().view(batch, length, embedding_size)
+        return self.output_dropout(self.projection(attended))
 
 
 class TransformerBlock(nn.Module):

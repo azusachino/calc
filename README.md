@@ -27,7 +27,7 @@ The starter corpus is `data/input.txt`. Training is intentionally CPU-friendly a
 ## Project map
 
 - `calc/tokenizer.py` — deterministic character vocabulary and encode/decode.
-- `calc/model.py` — causal decoder-only Transformer.
+- `calc/model.py` — decoder-only Transformer, including explicit Q/K/V projections and causal masking.
 - `calc/train.py` — data preparation, training loop, and checkpoint writing.
 - `calc/sample.py` — load a checkpoint and generate text.
 - `tests/` — small deterministic checks for the core contracts.
