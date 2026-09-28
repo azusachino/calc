@@ -1,7 +1,16 @@
 [project]
-name = "ame-platform"
+name = "calc-llm"
 version = "0.1.0"
-description = "Add your description here"
+description = "Learn to build a small language model from scratch"
 readme = "README.md"
-requires-python = ">=3.14"
-dependencies = []
+requires-python = ">=3.12"
+dependencies = ["torch>=2.6"]
+
+[dependency-groups]
+dev = []
+
+[tool.uv]
+package = true
+
+[tool.uv.workspace]
+members = ["packages/*"]

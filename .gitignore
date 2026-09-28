@@ -8,6 +8,7 @@ dist/
 
 # uv / virtualenv
 .venv/
+artifacts/
 
 # Environments
 .env

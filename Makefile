@@ -1,63 +1,22 @@
-# ame-platform task runner. Secrets load from .env (gitignored); copy .env.example.
--include .env
-export
-
 UV ?= uv
 
-.PHONY: help install check dry-run replay index call grade analyze clean age-key seal unseal reseal
+.PHONY: help install check train sample clean
 
-help: ## List targets
-	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | \
-		awk 'BEGIN{FS=":.*?## "}{printf "  %-12s %s\n", $$1, $$2}'
+help:
+	@printf '%s\n' 'install  Install the project environment' 'check    Run tests and compile sources' 'train    Train the tiny model' 'sample   Generate text from a trained checkpoint' 'clean    Remove local artifacts'
 
-install: ## Sync the uv environment from the lockfile
+install:
 	$(UV) sync
 
-check: ## Compile sources and validate seed data (no network)
-	$(UV) run python -m py_compile client.py replay.py grade.py index.py main.py
-	$(UV) run replay.py --dry-run
+check:
+	$(UV) run python -m compileall -q calc tests
+	$(UV) run python -m unittest discover -s tests
 
-dry-run: ## Validate + preview seed import without sending
-	$(UV) run replay.py --dry-run
+train:
+	$(UV) run python -m calc.train
 
-replay: guard-token ## Import every data/**/*.json into AME
-	$(UV) run replay.py
+sample:
+	$(UV) run python -m calc.sample
 
-index: ## Catalog seed decks grouped by course (no network)
-	$(UV) run index.py
-
-call: guard-token ## Call one tool: make call TOOL=stats.user [PARAMS='{"k":1}']
-	$(UV) run client.py $(TOOL) $(PARAMS)
-
-grade: guard-token ## List pending attempts, or grade one: make grade ARGS="<id> 0.8 notes"
-	$(UV) run grade.py $(ARGS)
-
-analyze: guard-token ## Weak-area report: make analyze [ARGS="--filter Rust"|"--all"]
-	$(UV) run analyze.py $(ARGS)
-
-guard-token:
-	@test -n "$(AME_TOKEN)" || { \
-		echo "AME_TOKEN not set — cp .env.example .env and fill it in"; exit 1; }
-
-clean: ## Remove caches
-	rm -rf .venv __pycache__ **/__pycache__
-
-# --- secrets (sops + age) -------------------------------------------------
-# secrets.env (encrypted) is committed; .env (plaintext) is gitignored.
-age-key: ## Generate this device's age key and print its public recipient
-	@KF="$${XDG_CONFIG_HOME:-$$HOME/.config}/sops/age/keys.txt"; \
-		mkdir -p "$$(dirname "$$KF")"; \
-		[ -f "$$KF" ] || age-keygen -o "$$KF"; \
-		echo "add this recipient to .sops.yaml:"; age-keygen -y "$$KF"
-
-seal: ## Encrypt local .env -> committed secrets.env
-	@test -f .env || { echo "no .env — cp .env.example .env and fill it in"; exit 1; }
-	sops --encrypt --input-type dotenv --output-type dotenv .env > secrets.env
-	@echo "sealed -> secrets.env (commit it)"
-
-unseal: ## Decrypt committed secrets.env -> local .env
-	@test -f secrets.env || { echo "no secrets.env to decrypt"; exit 1; }
-	sops --decrypt --input-type dotenv --output-type dotenv secrets.env > .env
-	@echo "unsealed -> .env"
-
-reseal: unseal seal ## Re-encrypt to all current .sops.yaml recipients
+clean:
+	rm -rf .venv __pycache__ calc/__pycache__ tests/__pycache__ artifacts
