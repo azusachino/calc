@@ -4,6 +4,7 @@ from pathlib import Path
 
 import torch
 
+from calc import config
 from calc.model import LanguageModel
 
 CHECKPOINT = Path(__file__).resolve().parent.parent / "artifacts" / "model.pt"
@@ -21,6 +22,7 @@ def main() -> None:
     if prompt not in ids:
         prompt = tokens[0]
     start = torch.tensor([[ids[prompt]]])
+    torch.manual_seed(config.SEED)
     sample = model.generate(start, max_new_tokens=500)[0].tolist()
     print("".join(tokens[index] for index in sample))
 
