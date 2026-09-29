@@ -19,6 +19,7 @@ Requires Python 3.12 or later and `uv`.
 make install
 make check
 make inspect  # inspect one training step without saving a checkpoint
+make compare-tokenizers
 make train
 make sample
 ```
@@ -56,7 +57,7 @@ print(bpe.decode(ids))      # hello world
 print(bpe.vocab_size)       # 50257
 ```
 
-The first `GPT2BPETokenizer()` call may download the GPT-2 encoding data into tiktoken's cache; it does not download model weights. Only `<|endoftext|>` is explicitly accepted as a special token. Compare how many IDs character, SimpleTokenizer, and GPT-2 BPE produce for the same text. The model and trainer still use `CharTokenizer`: switching to BPE also requires matching model vocabulary, checkpoint, and data-pipeline changes, which this exercise deliberately does not make.
+The first `GPT2BPETokenizer()` call may download the GPT-2 encoding data into tiktoken's cache; it does not download model weights. Only `<|endoftext|>` is explicitly accepted as a special token. Run `make compare-tokenizers` to compare vocabulary and token counts on the corpus, see each encoding's first next-token window, and observe V1's error versus V2's unknown-token fallback. The model and trainer still use `CharTokenizer`: switching to BPE also requires matching model vocabulary, checkpoint, and data-pipeline changes, which this exercise deliberately does not make.
 
 ## Project map
 
