@@ -63,9 +63,27 @@ print(bpe.vocab_size)       # 50257
 
 The first `GPT2BPETokenizer()` call may download the GPT-2 encoding data into tiktoken's cache; it does not download model weights. Only `<|endoftext|>` is explicitly accepted as a special token. Run `make compare-tokenizers` to compare vocabulary and token counts on the corpus, see each encoding's first next-token window, and observe V1's error versus V2's unknown-token fallback. The model and trainer still use `CharTokenizer`: switching to BPE also requires matching model vocabulary, checkpoint, and data-pipeline changes, which this exercise deliberately does not make.
 
+## Next-token dataset exercise
+
+`GPTDatasetV1` follows the book's sliding-window setup: it encodes text with `GPT2BPETokenizer` and returns input and next-token target windows. `stride` controls how far each window advances.
+
+```python
+from calc.dataset import GPTDatasetV1
+from calc.tokenizer import GPT2BPETokenizer
+
+text = "The quick brown fox jumps over the lazy dog."
+dataset = GPTDatasetV1(text, GPT2BPETokenizer(), max_length=4, stride=1)
+inputs, targets = dataset[0]
+print(inputs.tolist())
+print(targets.tolist())  # same sequence shifted one token forward
+```
+
+This is a separate exercise; `make train` continues to use the character-level pipeline. The GPT-2 encoding data may be downloaded on first use, but no model weights are used.
+
 ## Project map
 
 - `calc/tokenizer.py` — deterministic character tokenizer, book-inspired SimpleTokenizer V1/V2 exercises, and a GPT-2 BPE comparison using tiktoken.
+- `calc/dataset.py` — sliding-window next-token dataset using GPT-2 BPE.
 - `calc/model.py` — decoder-only Transformer, including explicit Q/K/V projections and causal masking.
 - `calc/train.py` — data preparation, training loop, and checkpoint writing.
 - `calc/sample.py` — load a checkpoint and generate text.
