@@ -4,13 +4,21 @@ version = "0.1.0"
 description = "Learn to build a small language model from scratch"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = ["torch>=2.6"]
+dependencies = [
+    "numpy>=1.26",
+    "tiktoken>=0.7",
+    "torch>=2.6",
+]
 
 [dependency-groups]
 dev = []
 
 [tool.uv]
 package = true
+exclude-newer = "7 days"
+
+[tool.setuptools.packages.find]
+include = ["calc*"]
 
 [tool.uv.workspace]
 members = ["packages/*"]

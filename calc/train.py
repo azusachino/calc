@@ -1,5 +1,6 @@
 """Train the small character-level Transformer on data/input.txt."""
 
+import argparse
 from pathlib import Path
 
 import torch
@@ -13,7 +14,41 @@ DATA = ROOT / "data" / "input.txt"
 CHECKPOINT = ROOT / "artifacts" / "model.pt"
 
 
+def inspect_step(
+    model: LanguageModel,
+    optimizer: torch.optim.Optimizer,
+    x: torch.Tensor,
+    y: torch.Tensor,
+    tokenizer: CharTokenizer,
+) -> None:
+    print(f"input:  shape={tuple(x.shape)}, dtype={x.dtype}")
+    print(f"target: shape={tuple(y.shape)}, dtype={y.dtype}")
+    print(f"example input:  {tokenizer.decode(x[0].tolist())!r}")
+    print(f"example target: {tokenizer.decode(y[0].tolist())!r}")
+
+    logits, loss = model(x, y)
+    optimizer.zero_grad(set_to_none=True)
+    loss.backward()
+    print(f"logits: shape={tuple(logits.shape)}")
+    print(f"loss: {loss.item():.4f}")
+    for name in ("token_embedding.weight", "output.weight"):
+        gradient = dict(model.named_parameters())[name].grad
+        print(
+            f"gradient {name}: shape={tuple(gradient.shape)}, "
+            f"norm={gradient.norm().item():.6f}"
+        )
+    optimizer.step()
+    print("one optimizer step applied; checkpoint not written")
+
+
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--inspect-step", action="store_true", help="inspect one batch and optimizer step"
+    )
+    args = parser.parse_args()
+
+    torch.manual_seed(config.SEED)
     text = DATA.read_text(encoding="utf-8")
     tokenizer = CharTokenizer(text)
     tokens = torch.tensor(tokenizer.encode(text), dtype=torch.long)
@@ -38,6 +73,11 @@ def main() -> None:
     )
     optimizer = torch.optim.AdamW(model.parameters(), lr=config.LEARNING_RATE)
     model.train()
+    if args.inspect_step:
+        x, y = batch(train_data)
+        inspect_step(model, optimizer, x, y, tokenizer)
+        return
+
     for step in range(config.STEPS):
         x, y = batch(train_data)
         _, loss = model(x, y)

@@ -1,9 +1,9 @@
 UV ?= uv
 
-.PHONY: help install check train sample clean
+.PHONY: help install check train inspect compare-tokenizers sample clean
 
 help:
-	@printf '%s\n' 'install  Install the project environment' 'check    Run tests and compile sources' 'train    Train the tiny model' 'sample   Generate text from a trained checkpoint' 'clean    Remove local artifacts'
+	@printf '%s\n' 'install  Install the project environment' 'check    Run tests and compile sources' 'inspect  Examine one training step' 'compare-tokenizers Compare tokenizer counts and next-token windows' 'train    Train the tiny model' 'sample   Generate text from a trained checkpoint' 'clean    Remove local artifacts'
 
 install:
 	$(UV) sync
@@ -11,6 +11,12 @@ install:
 check:
 	$(UV) run python -m compileall -q calc tests
 	$(UV) run python -m unittest discover -s tests
+
+inspect:
+	$(UV) run python -m calc.train --inspect-step
+
+compare-tokenizers:
+	$(UV) run python -m calc.compare_tokenizers
 
 train:
 	$(UV) run python -m calc.train
