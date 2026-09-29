@@ -27,9 +27,26 @@ The starter corpus is `data/input.txt`. Training is intentionally CPU-friendly a
 
 `make inspect` shows one sampled batch, input/target/logit shapes, decoded next-character examples, loss, and two gradient norms, then applies one optimizer step without writing the checkpoint. Each target sequence is the input shifted forward by one character, so each logit is scored against the next character. `make train` runs the full baseline.
 
+## Tokenizer exercise: SimpleTokenizer V1 and V2
+
+The `SimpleTokenizerV1` and `SimpleTokenizerV2` exercises follow Chapter 2 of Sebastian Raschka's [book code](https://github.com/rasbt/LLMs-from-scratch/blob/main/ch02/01_main-chapter-code/ch02.ipynb): V1 maps regex-split words and punctuation through a supplied vocabulary; V2 adds an `<|unk|>` fallback for out-of-vocabulary pieces. Build a deterministic vocabulary with `build_vocab`:
+
+```python
+from calc.tokenizer import SimpleTokenizerV1, SimpleTokenizerV2, build_vocab
+
+text = "Hello, world!"
+v1 = SimpleTokenizerV1(build_vocab(text))
+
+v2_vocab = build_vocab(text, special_tokens=("<|endoftext|>", "<|unk|>"))
+v2 = SimpleTokenizerV2(v2_vocab)
+print(v2.decode(v2.encode("Hello, there!")))  # Hello, <|unk|>!
+```
+
+These are explanatory word-token examples, not GPT-2's BPE tokenizer. The current model and training loop remain character-level and use `CharTokenizer`; the new classes are not drop-in replacements for its checkpoints.
+
 ## Project map
 
-- `calc/tokenizer.py` — deterministic character vocabulary and encode/decode.
+- `calc/tokenizer.py` — deterministic character tokenizer plus book-inspired SimpleTokenizer V1/V2 word-token exercises.
 - `calc/model.py` — decoder-only Transformer, including explicit Q/K/V projections and causal masking.
 - `calc/train.py` — data preparation, training loop, and checkpoint writing.
 - `calc/sample.py` — load a checkpoint and generate text.
@@ -40,7 +57,7 @@ This is a learning project. The tiny character vocabulary, small corpus, and CPU
 
 ## Baseline to compare against
 
-On a MacBook Air M2 (24 GB unified memory), the default configuration (seed 1337, 1,000 steps, batch size 32, context length 64, 46-character vocabulary) ran on CPU in about 18.7 seconds wall time on 2026-09-29. The final sampled training loss was 1.995 and validation loss 2.395. `make sample` generated a noisy character-level continuation from the starter corpus. This is a learning baseline, not a benchmark; timings and exact numbers can vary with PyTorch version and hardware. Re-run `make train` and `make sample` before comparing a change, and record the environment and settings.
+On a MacBook Air M2 (24 GB unified memory), the default configuration (seed 1337, 1,000 steps, batch size 32, context length 64, 46-character vocabulary) ran on CPU in about 17.4 seconds wall time on 2026-09-29. The final sampled training loss was 1.995 and validation loss 2.395. `make sample` generated a noisy character-level continuation from the starter corpus. This is a learning baseline, not a benchmark; timings and exact numbers can vary with PyTorch version and hardware. Re-run `make train` and `make sample` before comparing a change, and record the environment and settings.
 
 ## Compare with a pretrained model
 
