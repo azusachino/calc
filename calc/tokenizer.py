@@ -2,6 +2,8 @@
 
 import re
 
+import tiktoken
+
 
 _TOKEN_PATTERN = re.compile(r"([,.:;?_!\"()']|--|\s)")
 _UNK = "<|unk|>"
@@ -41,6 +43,23 @@ class CharTokenizer:
 
     def decode(self, ids: list[int]) -> str:
         return "".join(self.tokens[index] for index in ids)
+
+
+class GPT2BPETokenizer:
+    """A thin wrapper around the book's pretrained GPT-2 BPE encoding."""
+
+    def __init__(self):
+        self._encoding = tiktoken.get_encoding("gpt2")
+
+    @property
+    def vocab_size(self) -> int:
+        return self._encoding.max_token_value + 1
+
+    def encode(self, text: str) -> list[int]:
+        return self._encoding.encode(text, allowed_special={"<|endoftext|>"})
+
+    def decode(self, ids: list[int]) -> str:
+        return self._encoding.decode(ids)
 
 
 class SimpleTokenizerV1:

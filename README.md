@@ -42,11 +42,25 @@ v2 = SimpleTokenizerV2(v2_vocab)
 print(v2.decode(v2.encode("Hello, there!")))  # Hello, <|unk|>!
 ```
 
-These are explanatory word-token examples, not GPT-2's BPE tokenizer. The current model and training loop remain character-level and use `CharTokenizer`; the new classes are not drop-in replacements for its checkpoints.
+These are explanatory word-token examples, not GPT-2's BPE tokenizer. The current model and training loop remain character-level and use `CharTokenizer`; these alternatives are not drop-in replacements for its checkpoints.
+
+The next tokenizer step follows the book's [Chapter 2 GPT-2 tokenizer example](https://github.com/rasbt/LLMs-from-scratch/blob/main/ch02/01_main-chapter-code/ch02.ipynb): use OpenAI's [`tiktoken`](https://github.com/openai/tiktoken) implementation of byte-pair encoding (BPE).
+
+```python
+from calc.tokenizer import GPT2BPETokenizer
+
+bpe = GPT2BPETokenizer()
+ids = bpe.encode("hello world")
+print(ids)                  # [31373, 995]
+print(bpe.decode(ids))      # hello world
+print(bpe.vocab_size)       # 50257
+```
+
+The first `GPT2BPETokenizer()` call may download the GPT-2 encoding data into tiktoken's cache; it does not download model weights. Only `<|endoftext|>` is explicitly accepted as a special token. Compare how many IDs character, SimpleTokenizer, and GPT-2 BPE produce for the same text. The model and trainer still use `CharTokenizer`: switching to BPE also requires matching model vocabulary, checkpoint, and data-pipeline changes, which this exercise deliberately does not make.
 
 ## Project map
 
-- `calc/tokenizer.py` — deterministic character tokenizer plus book-inspired SimpleTokenizer V1/V2 word-token exercises.
+- `calc/tokenizer.py` — deterministic character tokenizer, book-inspired SimpleTokenizer V1/V2 exercises, and a GPT-2 BPE comparison using tiktoken.
 - `calc/model.py` — decoder-only Transformer, including explicit Q/K/V projections and causal masking.
 - `calc/train.py` — data preparation, training loop, and checkpoint writing.
 - `calc/sample.py` — load a checkpoint and generate text.
