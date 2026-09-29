@@ -28,6 +28,10 @@ The starter corpus is `data/input.txt`. Training is intentionally CPU-friendly a
 
 `make inspect` shows one sampled batch, input/target/logit shapes, decoded next-character examples, loss, and two gradient norms, then applies one optimizer step without writing the checkpoint. Each target sequence is the input shifted forward by one character, so each logit is scored against the next character. `make train` runs the full baseline.
 
+## Continuous integration
+
+GitHub Actions runs `make check` for pull requests and pushes to `main`. The workflow uses `mise.toml` to install the project's pinned Python and uv versions, then verifies the locked environment before testing.
+
 ## Tokenizer exercise: SimpleTokenizer V1 and V2
 
 The `SimpleTokenizerV1` and `SimpleTokenizerV2` exercises follow Chapter 2 of Sebastian Raschka's [book code](https://github.com/rasbt/LLMs-from-scratch/blob/main/ch02/01_main-chapter-code/ch02.ipynb): V1 maps regex-split words and punctuation through a supplied vocabulary; V2 adds an `<|unk|>` fallback for out-of-vocabulary pieces. Build a deterministic vocabulary with `build_vocab`:
