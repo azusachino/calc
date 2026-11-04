@@ -4,9 +4,9 @@ from contextlib import redirect_stdout
 
 import torch
 
-from calc.model import LanguageModel
-from calc.tokenizer import CharTokenizer
-from calc.train import inspect_step
+from calc.core.model import LanguageModel
+from calc.core.tokenizer import CharTokenizer
+from calc.core.train import inspect_step
 
 
 class TrainingInspectionTests(unittest.TestCase):

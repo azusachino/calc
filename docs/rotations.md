@@ -5,7 +5,7 @@ This document explores the geometry of 2D rotation matrices and how modern LLMs 
 Run the companion benchmark:
 
 ```bash
-uv run calc/rotations_rope.py
+uv run calc/math/rotations.py
 ```
 
 ---

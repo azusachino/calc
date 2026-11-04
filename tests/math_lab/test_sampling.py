@@ -3,7 +3,7 @@
 import math
 import unittest
 import torch
-from calc.sampling_math import (
+from calc.math.sampling import (
     stable_softmax,
     shannon_entropy,
     top_k_filter,

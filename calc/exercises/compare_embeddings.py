@@ -4,12 +4,12 @@ import torch
 from torch import nn
 
 from calc import config
-from calc.embeddings import (
+from calc.core.embeddings import (
     LearnedPositionalEmbedding,
     RotaryPositionalEmbedding,
     SinusoidalPositionalEncoding,
 )
-from calc.tokenizer import CharTokenizer
+from calc.core.tokenizer import CharTokenizer
 
 
 def main() -> None:

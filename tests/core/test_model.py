@@ -2,7 +2,7 @@ import unittest
 
 import torch
 
-from calc.model import LanguageModel
+from calc.core.model import LanguageModel
 
 
 class LanguageModelTests(unittest.TestCase):

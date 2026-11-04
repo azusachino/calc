@@ -5,7 +5,7 @@ This document explores the mathematical justification for dot product similarity
 Run the companion benchmark:
 
 ```bash
-uv run calc/attention_math.py
+uv run calc/math/attention.py
 ```
 
 ---
@@ -70,7 +70,7 @@ $$\frac{\partial \operatorname{Softmax}_i}{\partial z_j} = \operatorname{Softmax
 When $\operatorname{Softmax}_i \approx 1.0$, this gradient evaluates to $1.0 \times (1.0 - 1.0) = 0.0$.
 **Gradients vanish, and training stalls.**
 
-### Empirical benchmark results (`calc/attention_math.py`)
+### Empirical benchmark results (`calc/math/attention.py`)
 
 Simulating $d_k = 64$ and context length $16$:
 - **Raw Attention (No $1/\sqrt{d_k}$)**: Peak probability is **84.5%**, entropy collapses to **0.404** (saturated).

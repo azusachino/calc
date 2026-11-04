@@ -5,7 +5,7 @@ This document explores the fundamental geometric mental models underpinning toke
 Run the companion benchmark:
 
 ```bash
-uv run calc/vector_geometry.py
+uv run calc/math/vectors.py
 ```
 
 ---
@@ -51,7 +51,7 @@ Because $d = 768$ or $4096$ provides hundreds of nearly orthogonal directions, e
 
 ## 3. Subspace superposition benchmark
 
-`calc/vector_geometry.py` simulates adding a positional vector to normalized token embeddings:
+`calc/math/vectors.py` simulates adding a positional vector to normalized token embeddings:
 
 $$\text{sim}(\mathbf{e}_{\text{cat}}, \mathbf{e}_{\text{cat}} + \mathbf{p}_0) \approx 0.895$$
 $$\text{sim}(\mathbf{e}_{\text{cat}}, \mathbf{e}_{\text{dog}} + \mathbf{p}_1) \approx 0.005$$

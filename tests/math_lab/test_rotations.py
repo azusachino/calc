@@ -3,7 +3,7 @@
 import math
 import unittest
 import torch
-from calc.rotations_rope import (
+from calc.math.rotations import (
     rotation_matrix_2d,
     apply_rotation_2d,
     check_rope_relative_identity,

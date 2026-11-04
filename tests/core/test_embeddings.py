@@ -2,7 +2,7 @@ import unittest
 
 import torch
 
-from calc.embeddings import (
+from calc.core.embeddings import (
     LearnedPositionalEmbedding,
     RotaryPositionalEmbedding,
     SinusoidalPositionalEncoding,

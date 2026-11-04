@@ -5,7 +5,7 @@ This document explores how matrices function as space transformations and why mo
 Run the companion benchmark:
 
 ```bash
-uv run calc/linear_transformations.py
+uv run calc/math/transformations.py
 ```
 
 ---
@@ -56,4 +56,4 @@ A single word must act in three distinct roles:
 2. **Key ($K$)**: The published index tag ("What properties do I offer?").
 3. **Value ($V$)**: The substantive payload ("If selected, what semantic information do I transfer?").
 
-`calc/linear_transformations.py` demonstrates that starting from a single 768D token embedding, three independent linear projections produce $q, k, v$ vectors with near-zero mutual correlation ($\cos \approx 0$). Each role operates in its own dedicated semantic sub-space.
+`calc/math/transformations.py` demonstrates that starting from a single 768D token embedding, three independent linear projections produce $q, k, v$ vectors with near-zero mutual correlation ($\cos \approx 0$). Each role operates in its own dedicated semantic sub-space.

@@ -1,6 +1,6 @@
 # Positional embeddings: Learned, Sinusoidal, and RoPE
 
-This document explores how sequence order is represented in language models, covering the mathematical intuition, implementation in `calc/embeddings.py`, and primary research papers.
+This document explores how sequence order is represented in language models, covering the mathematical intuition, implementation in `calc/core/embeddings.py`, and primary research papers.
 
 ---
 
@@ -95,7 +95,7 @@ rotated_q = rope(q)
 Run the comparison script:
 
 ```bash
-uv run calc/compare_embeddings.py
+uv run calc/exercises/compare_embeddings.py
 ```
 
 Observe the relative distance inner-product decay:

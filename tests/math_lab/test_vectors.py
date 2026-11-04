@@ -2,7 +2,7 @@
 
 import unittest
 import torch
-from calc.vector_geometry import (
+from calc.math.vectors import (
     cosine_similarity,
     measure_dimension_orthogonality,
     demonstrate_subspace_superposition,

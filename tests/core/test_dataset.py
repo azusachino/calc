@@ -1,6 +1,6 @@
 import unittest
 
-from calc.dataset import GPTDatasetV1
+from calc.core.dataset import GPTDatasetV1
 
 
 class StubTokenizer:

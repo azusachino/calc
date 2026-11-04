@@ -35,19 +35,16 @@ GitHub Actions runs `make check` for pull requests and pushes to `main`. The wor
 
 The repository includes standalone inspection scripts and component exercises for studying parts of the language model pipeline in isolation. See [`docs/`](docs/index.md) for full walkthroughs:
 
-- [Tokenizers and datasets](docs/tokenizers.md) — word splitting, OOV handling, and GPT-2 BPE (`uv run calc/compare_tokenizers.py`).
-- [Positional embeddings](docs/embeddings.md) — learned lookup tables, sinusoidal waveforms, and RoPE (`uv run calc/compare_embeddings.py`).
+- [Tokenizers and datasets](docs/tokenizers.md) — word splitting, OOV handling, and GPT-2 BPE (`uv run calc/exercises/compare_tokenizers.py`).
+- [Positional embeddings](docs/embeddings.md) — learned lookup tables, sinusoidal waveforms, and RoPE (`uv run calc/exercises/compare_embeddings.py`).
 
 ## Project map
 
-- `calc/model.py` — decoder-only Transformer, including explicit Q/K/V projections and causal masking.
-- `calc/train.py` — data preparation, training loop, and checkpoint writing.
-- `calc/sample.py` — load a checkpoint and generate text.
-- `calc/tokenizer.py` — character tokenizer, SimpleTokenizer V1/V2, and GPT-2 BPE.
-- `calc/embeddings.py` — learned, sinusoidal, and rotary positional embeddings.
-- `calc/dataset.py` — sliding-window next-token dataset using GPT-2 BPE.
+- `calc/core/` — decoder-only Transformer model, embeddings, tokenizer, dataset, and training runtime.
+- `calc/math/` — theory labs and mathematical geometry benchmarks corresponding to the *math-for-ai* curriculum.
+- `calc/exercises/` — standalone inspection and comparative scripts.
 - `docs/` — component exercises and exploration index.
-- `tests/` — small deterministic checks for the core contracts (`make check`).
+- `tests/` — deterministic checks across core model and math modules (`make check`).
 - `packages/` — optional workspace members for independent experiments and extensions.
 
 This is a learning project. The tiny character vocabulary, small corpus, and CPU-sized model are deliberate limits; scaling and production inference are outside the starter scope.

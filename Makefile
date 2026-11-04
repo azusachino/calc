@@ -13,13 +13,13 @@ check:
 	$(UV) run python -m unittest discover -s tests
 
 inspect:
-	$(UV) run python -m calc.train --inspect-step
+	$(UV) run python -m calc.core.train --inspect-step
 
 train:
-	$(UV) run python -m calc.train
+	$(UV) run python -m calc.core.train
 
 sample:
-	$(UV) run python -m calc.sample
+	$(UV) run python -m calc.core.sample
 
 clean:
 	rm -rf .venv __pycache__ calc/__pycache__ tests/__pycache__ artifacts

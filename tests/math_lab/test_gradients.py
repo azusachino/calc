@@ -1,7 +1,7 @@
 """Tests for gradient descent, autograd equivalence, and residual gradient highway."""
 
 import unittest
-from calc.gradient_descent import (
+from calc.math.gradients import (
     quadratic_loss_and_analytical_grad,
     compute_autograd,
     run_gradient_descent,

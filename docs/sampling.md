@@ -5,7 +5,7 @@ This document explores the bridge between continuous unnormalized logits and dis
 Run the companion benchmark:
 
 ```bash
-uv run calc/sampling_math.py
+uv run calc/math/sampling.py
 ```
 
 ---

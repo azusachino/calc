@@ -54,7 +54,7 @@ print(targets.tolist())  # same sequence shifted one token forward
 Run the tokenizer comparison:
 
 ```bash
-uv run calc/compare_tokenizers.py
+uv run calc/exercises/compare_tokenizers.py
 ```
 
 Compares vocabulary size, total token count on `data/input.txt`, first next-token window, and OOV fallback handling across character-level, SimpleTokenizer, and BPE.

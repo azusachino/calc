@@ -2,7 +2,7 @@
 
 import unittest
 import torch
-from calc.linear_transformations import (
+from calc.math.transformations import (
     transform_2d_grid,
     check_attention_symmetry,
     measure_qkv_orthogonality,

@@ -2,7 +2,7 @@
 
 import unittest
 import torch
-from calc.attention_math import (
+from calc.math.attention import (
     dot_product_and_projection,
     measure_attention_variance,
     measure_softmax_saturation,

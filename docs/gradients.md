@@ -5,7 +5,7 @@ This document explores the calculus foundations of neural network training: how 
 Run the companion benchmark:
 
 ```bash
-uv run calc/gradient_descent.py
+uv run calc/math/gradients.py
 ```
 
 ---
