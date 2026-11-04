@@ -19,8 +19,6 @@ Requires Python 3.12 or later and `uv`.
 make install
 make check
 make inspect  # inspect one training step without saving a checkpoint
-make compare-tokenizers
-make compare-embeddings
 make train
 make sample
 ```
@@ -62,7 +60,7 @@ print(bpe.decode(ids))      # hello world
 print(bpe.vocab_size)       # 50257
 ```
 
-The first `GPT2BPETokenizer()` call may download the GPT-2 encoding data into tiktoken's cache; it does not download model weights. Only `<|endoftext|>` is explicitly accepted as a special token. Run `make compare-tokenizers` to compare vocabulary and token counts on the corpus, see each encoding's first next-token window, and observe V1's error versus V2's unknown-token fallback. The model and trainer still use `CharTokenizer`: switching to BPE also requires matching model vocabulary, checkpoint, and data-pipeline changes, which this exercise deliberately does not make.
+The first `GPT2BPETokenizer()` call may download the GPT-2 encoding data into tiktoken's cache; it does not download model weights. Only `<|endoftext|>` is explicitly accepted as a special token. Run `uv run python -m calc.compare_tokenizers` to compare vocabulary and token counts on the corpus, see each encoding's first next-token window, and observe V1's error versus V2's unknown-token fallback. The model and trainer still use `CharTokenizer`: switching to BPE also requires matching model vocabulary, checkpoint, and data-pipeline changes, which this exercise deliberately does not make.
 
 ## Next-token dataset exercise
 
@@ -89,10 +87,20 @@ This is a separate exercise; `make train` continues to use the character-level p
 2. **SinusoidalPositionalEncoding** — Vaswani et al. (2017) fixed sine/cosine waveforms across geometric frequencies.
 3. **RotaryPositionalEmbedding (RoPE)** — Su et al. (2021) 2D block-diagonal rotation applied to query/key tensors, ensuring attention dot-products depend solely on relative distance.
 
-Run `make compare-embeddings` to observe:
+Run `uv run python -m calc.compare_embeddings` to observe:
 - Input token lookup and broadcasting addition `[B, T, D] + [T, D] -> [B, T, D]`.
 - Sinusoidal encoding properties and dynamic sequence extension.
 - Inner-product decay over relative distance for Sinusoidal and RoPE.
+
+## Exploratory exercises index
+
+The codebase includes standalone inspection and comparison scripts for exploring concepts without running full model training. Run them directly with `uv run`:
+
+| Exercise | Module | Command | What it inspects |
+| --- | --- | --- | --- |
+| **Tokenizers** | `calc.compare_tokenizers` | `uv run python -m calc.compare_tokenizers` | Vocabulary counts across character, word (V1/V2), and GPT-2 BPE, next-token windows, and OOV handling |
+| **Embeddings & Positions** | `calc.compare_embeddings` | `uv run python -m calc.compare_embeddings` | `nn.Embedding` lookup, tensor broadcasting `[B, T, D] + [T, D]`, and Sinusoidal vs RoPE relative distance inner-product decay |
+| **Step inspection** | `calc.train` | `make inspect` (or `uv run python -m calc.train --inspect-step`) | Batch extraction, input/target token alignment, logit shapes, loss, and initial gradient norms |
 
 ## Project map
 
