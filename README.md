@@ -31,87 +31,23 @@ The starter corpus is `data/input.txt`. Training is intentionally CPU-friendly a
 
 GitHub Actions runs `make check` for pull requests and pushes to `main`. The workflow uses `mise.toml` to install the project's pinned Python and uv versions, then verifies the locked environment before testing.
 
-## Tokenizer exercise: SimpleTokenizer V1 and V2
+## Exploratory exercises
 
-The `SimpleTokenizerV1` and `SimpleTokenizerV2` exercises follow Chapter 2 of Sebastian Raschka's [book code](https://github.com/rasbt/LLMs-from-scratch/blob/main/ch02/01_main-chapter-code/ch02.ipynb): V1 maps regex-split words and punctuation through a supplied vocabulary; V2 adds an `<|unk|>` fallback for out-of-vocabulary pieces. Build a deterministic vocabulary with `build_vocab`:
+The repository includes standalone inspection scripts and component exercises for studying parts of the language model pipeline in isolation. See [`docs/`](docs/index.md) for full walkthroughs:
 
-```python
-from calc.tokenizer import SimpleTokenizerV1, SimpleTokenizerV2, build_vocab
-
-text = "Hello, world!"
-v1 = SimpleTokenizerV1(build_vocab(text))
-
-v2_vocab = build_vocab(text, special_tokens=("<|endoftext|>", "<|unk|>"))
-v2 = SimpleTokenizerV2(v2_vocab)
-print(v2.decode(v2.encode("Hello, there!")))  # Hello, <|unk|>!
-```
-
-These are explanatory word-token examples, not GPT-2's BPE tokenizer. The current model and training loop remain character-level and use `CharTokenizer`; these alternatives are not drop-in replacements for its checkpoints.
-
-The next tokenizer step follows the book's [Chapter 2 GPT-2 tokenizer example](https://github.com/rasbt/LLMs-from-scratch/blob/main/ch02/01_main-chapter-code/ch02.ipynb): use OpenAI's [`tiktoken`](https://github.com/openai/tiktoken) implementation of byte-pair encoding (BPE).
-
-```python
-from calc.tokenizer import GPT2BPETokenizer
-
-bpe = GPT2BPETokenizer()
-ids = bpe.encode("hello world")
-print(ids)                  # [31373, 995]
-print(bpe.decode(ids))      # hello world
-print(bpe.vocab_size)       # 50257
-```
-
-The first `GPT2BPETokenizer()` call may download the GPT-2 encoding data into tiktoken's cache; it does not download model weights. Only `<|endoftext|>` is explicitly accepted as a special token. Run `uv run calc/compare_tokenizers.py` to compare vocabulary and token counts on the corpus, see each encoding's first next-token window, and observe V1's error versus V2's unknown-token fallback. The model and trainer still use `CharTokenizer`: switching to BPE also requires matching model vocabulary, checkpoint, and data-pipeline changes, which this exercise deliberately does not make.
-
-## Next-token dataset exercise
-
-`GPTDatasetV1` follows the book's sliding-window setup: it encodes text with `GPT2BPETokenizer` and returns input and next-token target windows. `stride` controls how far each window advances.
-
-```python
-from calc.dataset import GPTDatasetV1
-from calc.tokenizer import GPT2BPETokenizer
-
-text = "The quick brown fox jumps over the lazy dog."
-dataset = GPTDatasetV1(text, GPT2BPETokenizer(), max_length=4, stride=1)
-inputs, targets = dataset[0]
-print(inputs.tolist())
-print(targets.tolist())  # same sequence shifted one token forward
-```
-
-This is a separate exercise; `make train` continues to use the character-level pipeline. The GPT-2 encoding data may be downloaded on first use, but no model weights are used.
-
-## Positional embedding exercises: Learned, Sinusoidal, and RoPE
-
-`calc/embeddings.py` implements the three foundational paradigms for sequence position awareness:
-
-1. **LearnedPositionalEmbedding** — A lookup table `nn.Embedding(block_size, embedding_size)` matching the baseline model.
-2. **SinusoidalPositionalEncoding** — Vaswani et al. (2017) fixed sine/cosine waveforms across geometric frequencies.
-3. **RotaryPositionalEmbedding (RoPE)** — Su et al. (2021) 2D block-diagonal rotation applied to query/key tensors, ensuring attention dot-products depend solely on relative distance.
-
-Run `uv run calc/compare_embeddings.py` to observe:
-- Input token lookup and broadcasting addition `[B, T, D] + [T, D] -> [B, T, D]`.
-- Sinusoidal encoding properties and dynamic sequence extension.
-- Inner-product decay over relative distance for Sinusoidal and RoPE.
-
-## Exploratory exercises index
-
-The codebase includes standalone inspection and comparison scripts for exploring concepts without running full model training. Run them directly with `uv run`:
-
-| Exercise | Script | Command | What it inspects |
-| --- | --- | --- | --- |
-| **Tokenizers** | `calc/compare_tokenizers.py` | `uv run calc/compare_tokenizers.py` | Vocabulary counts across character, word (V1/V2), and GPT-2 BPE, next-token windows, and OOV handling |
-| **Embeddings & Positions** | `calc/compare_embeddings.py` | `uv run calc/compare_embeddings.py` | `nn.Embedding` lookup, tensor broadcasting `[B, T, D] + [T, D]`, and Sinusoidal vs RoPE relative distance inner-product decay |
-| **Step inspection** | `calc/train.py` | `make inspect` (or `uv run calc/train.py --inspect-step`) | Batch extraction, input/target token alignment, logit shapes, loss, and initial gradient norms |
+- [Tokenizers and datasets](docs/tokenizers.md) — word splitting, OOV handling, and GPT-2 BPE (`uv run calc/compare_tokenizers.py`).
+- [Positional embeddings](docs/embeddings.md) — learned lookup tables, sinusoidal waveforms, and RoPE (`uv run calc/compare_embeddings.py`).
 
 ## Project map
 
-- `calc/tokenizer.py` — deterministic character tokenizer, book-inspired SimpleTokenizer V1/V2 exercises, and a GPT-2 BPE comparison using tiktoken.
-- `calc/dataset.py` — sliding-window next-token dataset using GPT-2 BPE.
-- `calc/embeddings.py` — learned, sinusoidal, and rotary positional embeddings.
-- `calc/compare_embeddings.py` — comparison of embedding lookups, broadcasting, and relative distance decay.
 - `calc/model.py` — decoder-only Transformer, including explicit Q/K/V projections and causal masking.
 - `calc/train.py` — data preparation, training loop, and checkpoint writing.
 - `calc/sample.py` — load a checkpoint and generate text.
-- `tests/` — small deterministic checks for the core contracts.
+- `calc/tokenizer.py` — character tokenizer, SimpleTokenizer V1/V2, and GPT-2 BPE.
+- `calc/embeddings.py` — learned, sinusoidal, and rotary positional embeddings.
+- `calc/dataset.py` — sliding-window next-token dataset using GPT-2 BPE.
+- `docs/` — component exercises and exploration index.
+- `tests/` — small deterministic checks for the core contracts (`make check`).
 - `packages/` — optional workspace members for independent experiments and extensions.
 
 This is a learning project. The tiny character vocabulary, small corpus, and CPU-sized model are deliberate limits; scaling and production inference are outside the starter scope.
