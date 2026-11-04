@@ -15,6 +15,7 @@ Run any exercise directly with `uv run`:
 | **Linear Transformations & QKV** | `calc/linear_transformations.py` | `uv run calc/linear_transformations.py` | [Transformations and QKV](transformations.md) |
 | **Rotations & RoPE Relative Math** | `calc/rotations_rope.py` | `uv run calc/rotations_rope.py` | [Rotations and RoPE](rotations.md) |
 | **Gradients & Loss Surfaces** | `calc/gradient_descent.py` | `uv run calc/gradient_descent.py` | [Gradients and Backprop](gradients.md) |
+| **Probability & Discrete Sampling** | `calc/sampling_math.py` | `uv run calc/sampling_math.py` | [Probability and Sampling](sampling.md) |
 | **Tokenizers & Datasets** | `calc/compare_tokenizers.py`, `calc/dataset.py` | `uv run calc/compare_tokenizers.py` | [Tokenizers and Datasets](tokenizers.md) |
 | **Positional Encodings** | `calc/compare_embeddings.py`, `calc/embeddings.py` | `uv run calc/compare_embeddings.py` | [Positional Embeddings](embeddings.md) |
 | **Single-Step Training Probe** | `calc/train.py` | `make inspect` (or `uv run calc/train.py --inspect-step`) | [README Quick Start](../README.md#quick-start) |
