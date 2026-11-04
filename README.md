@@ -20,6 +20,7 @@ make install
 make check
 make inspect  # inspect one training step without saving a checkpoint
 make compare-tokenizers
+make compare-embeddings
 make train
 make sample
 ```
@@ -80,10 +81,25 @@ print(targets.tolist())  # same sequence shifted one token forward
 
 This is a separate exercise; `make train` continues to use the character-level pipeline. The GPT-2 encoding data may be downloaded on first use, but no model weights are used.
 
+## Positional embedding exercises: Learned, Sinusoidal, and RoPE
+
+`calc/embeddings.py` implements the three foundational paradigms for sequence position awareness:
+
+1. **LearnedPositionalEmbedding** — A lookup table `nn.Embedding(block_size, embedding_size)` matching the baseline model.
+2. **SinusoidalPositionalEncoding** — Vaswani et al. (2017) fixed sine/cosine waveforms across geometric frequencies.
+3. **RotaryPositionalEmbedding (RoPE)** — Su et al. (2021) 2D block-diagonal rotation applied to query/key tensors, ensuring attention dot-products depend solely on relative distance.
+
+Run `make compare-embeddings` to observe:
+- Input token lookup and broadcasting addition `[B, T, D] + [T, D] -> [B, T, D]`.
+- Sinusoidal encoding properties and dynamic sequence extension.
+- Inner-product decay over relative distance for Sinusoidal and RoPE.
+
 ## Project map
 
 - `calc/tokenizer.py` — deterministic character tokenizer, book-inspired SimpleTokenizer V1/V2 exercises, and a GPT-2 BPE comparison using tiktoken.
 - `calc/dataset.py` — sliding-window next-token dataset using GPT-2 BPE.
+- `calc/embeddings.py` — learned, sinusoidal, and rotary positional embeddings.
+- `calc/compare_embeddings.py` — comparison of embedding lookups, broadcasting, and relative distance decay.
 - `calc/model.py` — decoder-only Transformer, including explicit Q/K/V projections and causal masking.
 - `calc/train.py` — data preparation, training loop, and checkpoint writing.
 - `calc/sample.py` — load a checkpoint and generate text.
