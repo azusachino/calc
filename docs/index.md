@@ -11,6 +11,7 @@ Run any exercise directly with `uv run`:
 | Topic | Script / Module | Command | Documentation |
 | --- | --- | --- | --- |
 | **Vector Geometry & High-Dim Spaces** | `calc/vector_geometry.py` | `uv run calc/vector_geometry.py` | [Vector Geometry](geometry.md) |
+| **Dot Products & Scaled Attention** | `calc/attention_math.py` | `uv run calc/attention_math.py` | [Attention Mathematics](attention_math.md) |
 | **Tokenizers & Datasets** | `calc/compare_tokenizers.py`, `calc/dataset.py` | `uv run calc/compare_tokenizers.py` | [Tokenizers and Datasets](tokenizers.md) |
 | **Positional Encodings** | `calc/compare_embeddings.py`, `calc/embeddings.py` | `uv run calc/compare_embeddings.py` | [Positional Embeddings](embeddings.md) |
 | **Single-Step Training Probe** | `calc/train.py` | `make inspect` (or `uv run calc/train.py --inspect-step`) | [README Quick Start](../README.md#quick-start) |
