@@ -19,7 +19,6 @@ Requires Python 3.12 or later and `uv`.
 make install
 make check
 make inspect  # inspect one training step without saving a checkpoint
-make compare-tokenizers
 make train
 make sample
 ```
@@ -32,62 +31,20 @@ The starter corpus is `data/input.txt`. Training is intentionally CPU-friendly a
 
 GitHub Actions runs `make check` for pull requests and pushes to `main`. The workflow uses `mise.toml` to install the project's pinned Python and uv versions, then verifies the locked environment before testing.
 
-## Tokenizer exercise: SimpleTokenizer V1 and V2
+## Exploratory exercises
 
-The `SimpleTokenizerV1` and `SimpleTokenizerV2` exercises follow Chapter 2 of Sebastian Raschka's [book code](https://github.com/rasbt/LLMs-from-scratch/blob/main/ch02/01_main-chapter-code/ch02.ipynb): V1 maps regex-split words and punctuation through a supplied vocabulary; V2 adds an `<|unk|>` fallback for out-of-vocabulary pieces. Build a deterministic vocabulary with `build_vocab`:
+The repository includes standalone inspection scripts and component exercises for studying parts of the language model pipeline in isolation. See [`docs/`](docs/index.md) for full walkthroughs:
 
-```python
-from calc.tokenizer import SimpleTokenizerV1, SimpleTokenizerV2, build_vocab
-
-text = "Hello, world!"
-v1 = SimpleTokenizerV1(build_vocab(text))
-
-v2_vocab = build_vocab(text, special_tokens=("<|endoftext|>", "<|unk|>"))
-v2 = SimpleTokenizerV2(v2_vocab)
-print(v2.decode(v2.encode("Hello, there!")))  # Hello, <|unk|>!
-```
-
-These are explanatory word-token examples, not GPT-2's BPE tokenizer. The current model and training loop remain character-level and use `CharTokenizer`; these alternatives are not drop-in replacements for its checkpoints.
-
-The next tokenizer step follows the book's [Chapter 2 GPT-2 tokenizer example](https://github.com/rasbt/LLMs-from-scratch/blob/main/ch02/01_main-chapter-code/ch02.ipynb): use OpenAI's [`tiktoken`](https://github.com/openai/tiktoken) implementation of byte-pair encoding (BPE).
-
-```python
-from calc.tokenizer import GPT2BPETokenizer
-
-bpe = GPT2BPETokenizer()
-ids = bpe.encode("hello world")
-print(ids)                  # [31373, 995]
-print(bpe.decode(ids))      # hello world
-print(bpe.vocab_size)       # 50257
-```
-
-The first `GPT2BPETokenizer()` call may download the GPT-2 encoding data into tiktoken's cache; it does not download model weights. Only `<|endoftext|>` is explicitly accepted as a special token. Run `make compare-tokenizers` to compare vocabulary and token counts on the corpus, see each encoding's first next-token window, and observe V1's error versus V2's unknown-token fallback. The model and trainer still use `CharTokenizer`: switching to BPE also requires matching model vocabulary, checkpoint, and data-pipeline changes, which this exercise deliberately does not make.
-
-## Next-token dataset exercise
-
-`GPTDatasetV1` follows the book's sliding-window setup: it encodes text with `GPT2BPETokenizer` and returns input and next-token target windows. `stride` controls how far each window advances.
-
-```python
-from calc.dataset import GPTDatasetV1
-from calc.tokenizer import GPT2BPETokenizer
-
-text = "The quick brown fox jumps over the lazy dog."
-dataset = GPTDatasetV1(text, GPT2BPETokenizer(), max_length=4, stride=1)
-inputs, targets = dataset[0]
-print(inputs.tolist())
-print(targets.tolist())  # same sequence shifted one token forward
-```
-
-This is a separate exercise; `make train` continues to use the character-level pipeline. The GPT-2 encoding data may be downloaded on first use, but no model weights are used.
+- [Tokenizers and datasets](docs/tokenizers.md) — word splitting, OOV handling, and GPT-2 BPE (`uv run calc/exercises/compare_tokenizers.py`).
+- [Positional embeddings](docs/embeddings.md) — learned lookup tables, sinusoidal waveforms, and RoPE (`uv run calc/exercises/compare_embeddings.py`).
 
 ## Project map
 
-- `calc/tokenizer.py` — deterministic character tokenizer, book-inspired SimpleTokenizer V1/V2 exercises, and a GPT-2 BPE comparison using tiktoken.
-- `calc/dataset.py` — sliding-window next-token dataset using GPT-2 BPE.
-- `calc/model.py` — decoder-only Transformer, including explicit Q/K/V projections and causal masking.
-- `calc/train.py` — data preparation, training loop, and checkpoint writing.
-- `calc/sample.py` — load a checkpoint and generate text.
-- `tests/` — small deterministic checks for the core contracts.
+- `calc/core/` — decoder-only Transformer model, embeddings, tokenizer, dataset, and training runtime.
+- `calc/math/` — theory labs and mathematical geometry benchmarks corresponding to the *math-for-ai* curriculum.
+- `calc/exercises/` — standalone inspection and comparative scripts.
+- `docs/` — component exercises and exploration index.
+- `tests/` — deterministic checks across core model and math modules (`make check`).
 - `packages/` — optional workspace members for independent experiments and extensions.
 
 This is a learning project. The tiny character vocabulary, small corpus, and CPU-sized model are deliberate limits; scaling and production inference are outside the starter scope.

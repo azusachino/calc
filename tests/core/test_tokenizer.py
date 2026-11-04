@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import Mock, patch
 
-from calc.tokenizer import (
+from calc.core.tokenizer import (
     CharTokenizer,
     GPT2BPETokenizer,
     SimpleTokenizerV1,
@@ -22,7 +22,7 @@ class CharTokenizerTests(unittest.TestCase):
 
 
 class GPT2BPETokenizerTests(unittest.TestCase):
-    @patch("calc.tokenizer.tiktoken.get_encoding")
+    @patch("calc.core.tokenizer.tiktoken.get_encoding")
     def test_uses_gpt2_encoding_and_allows_end_of_text_marker(self, get_encoding):
         encoding = Mock(max_token_value=50256)
         encoding.encode.return_value = [50256]

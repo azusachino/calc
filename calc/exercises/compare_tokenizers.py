@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from calc.tokenizer import (
+from calc.core.tokenizer import (
     CharTokenizer,
     GPT2BPETokenizer,
     SimpleTokenizerV1,
@@ -10,7 +10,7 @@ from calc.tokenizer import (
     build_vocab,
 )
 
-DATA = Path(__file__).resolve().parent.parent / "data" / "input.txt"
+DATA = Path(__file__).resolve().parents[2] / "data" / "input.txt"
 
 
 def main() -> None:

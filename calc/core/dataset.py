@@ -3,7 +3,7 @@
 import torch
 from torch.utils.data import Dataset
 
-from calc.tokenizer import GPT2BPETokenizer
+from calc.core.tokenizer import GPT2BPETokenizer
 
 
 class GPTDatasetV1(Dataset[tuple[torch.Tensor, torch.Tensor]]):
