@@ -7,7 +7,7 @@ This document covers the standalone tokenizer exercises and sliding-window datas
 Following Chapter 2 of Sebastian Raschka's *Build a Large Language Model (From Scratch)*:
 
 ```python
-from calc.tokenizer import SimpleTokenizerV1, SimpleTokenizerV2, build_vocab
+from calc.core.tokenizer import SimpleTokenizerV1, SimpleTokenizerV2, build_vocab
 
 text = "Hello, world!"
 v1 = SimpleTokenizerV1(build_vocab(text))
@@ -25,7 +25,7 @@ print(v2.decode(v2.encode("Hello, there!")))  # Hello, <|unk|>!
 Uses OpenAI's `tiktoken` to demonstrate subword tokenization:
 
 ```python
-from calc.tokenizer import GPT2BPETokenizer
+from calc.core.tokenizer import GPT2BPETokenizer
 
 bpe = GPT2BPETokenizer()
 ids = bpe.encode("hello world")
@@ -39,8 +39,8 @@ print(bpe.vocab_size)       # 50257
 Encodes text with `GPT2BPETokenizer` and returns input and shifted next-token target windows:
 
 ```python
-from calc.dataset import GPTDatasetV1
-from calc.tokenizer import GPT2BPETokenizer
+from calc.core.dataset import GPTDatasetV1
+from calc.core.tokenizer import GPT2BPETokenizer
 
 text = "The quick brown fox jumps over the lazy dog."
 dataset = GPTDatasetV1(text, GPT2BPETokenizer(), max_length=4, stride=1)
