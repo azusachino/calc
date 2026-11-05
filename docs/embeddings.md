@@ -42,7 +42,7 @@ This single addition gives attention four distinct perceptual abilities simultan
 ### 1. Learned absolute position embeddings (`LearnedPositionalEmbedding`)
 
 ```python
-from calc.embeddings import LearnedPositionalEmbedding
+from calc.core.embeddings import LearnedPositionalEmbedding
 
 pos_emb = LearnedPositionalEmbedding(block_size=64, embedding_size=128)
 positions = pos_emb(16)  # shape: [16, 128]
@@ -59,7 +59,7 @@ Vaswani et al. (2017) introduced deterministic sinusoidal waveforms across geome
 $$PE_{(pos, 2i)} = \sin\left(\frac{pos}{10000^{2i / D}}\right), \quad PE_{(pos, 2i+1)} = \cos\left(\frac{pos}{10000^{2i / D}}\right)$$
 
 ```python
-from calc.embeddings import SinusoidalPositionalEncoding
+from calc.core.embeddings import SinusoidalPositionalEncoding
 
 sin_emb = SinusoidalPositionalEncoding(embedding_size=128, max_length=64)
 pe = sin_emb(16)  # shape: [16, 128]
@@ -76,7 +76,7 @@ $$\mathbf{q}_m = \mathbf{R}_{m\theta} \mathbf{q}, \quad \mathbf{k}_n = \mathbf{R
 
 ```python
 import torch
-from calc.embeddings import RotaryPositionalEmbedding
+from calc.core.embeddings import RotaryPositionalEmbedding
 
 rope = RotaryPositionalEmbedding(head_size=32, max_length=64)
 q = torch.randn(1, 4, 16, 32)  # [batch, heads, length, head_size]
