@@ -69,6 +69,17 @@ class SamplingMathTests(unittest.TestCase):
         self.assertAlmostEqual(float(filtered[3].item()), 0.0, places=5)
         self.assertAlmostEqual(float(filtered.sum().item()), 1.0, places=5)
 
+    def test_top_p_keeps_smallest_set_when_cumulative_equals_p(self):
+        probs = torch.tensor([0.5, 0.3, 0.15, 0.05])
+        # Cumulative: 0.5, then 0.8 == p, so the first two tokens already reach p.
+        filtered = top_p_filter(probs, p=0.8)
+
+        self.assertGreater(float(filtered[0].item()), 0.0)
+        self.assertGreater(float(filtered[1].item()), 0.0)
+        self.assertAlmostEqual(float(filtered[2].item()), 0.0, places=5)
+        self.assertAlmostEqual(float(filtered[3].item()), 0.0, places=5)
+        self.assertAlmostEqual(float(filtered.sum().item()), 1.0, places=5)
+
     def test_sample_categorical(self):
         probs = torch.tensor([0.0, 1.0, 0.0])
         idx = sample_categorical(probs, seed=42)

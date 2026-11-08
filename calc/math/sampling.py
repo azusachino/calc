@@ -54,9 +54,9 @@ def top_p_filter(probs: torch.Tensor, p: float) -> torch.Tensor:
     sorted_probs, sorted_indices = torch.sort(probs, descending=True)
     cumulative_probs = torch.cumsum(sorted_probs, dim=0)
 
-    # Find mask of tokens exceeding threshold p
+    # Find mask of tokens at which the cumulative probability reaches p
     # Keep at least the top-1 token
-    cutoff_mask = cumulative_probs > p
+    cutoff_mask = cumulative_probs >= p
     # Shift right so that the first token that crosses threshold p is kept
     cutoff_mask[1:] = cutoff_mask[:-1].clone()
     cutoff_mask[0] = False
