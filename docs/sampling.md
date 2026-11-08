@@ -60,7 +60,7 @@ Unconstrained sampling from the raw Softmax distribution risks selecting tokens 
 - **Limitation**: Fixed $k$ is rigid. If the distribution is peaked ($p_{\text{top}} = 0.95$), keeping $k=50$ includes noisy tail tokens. If the distribution is flat, $k=50$ might cut off viable synonyms.
 
 ### Top-$p$ / Nucleus filtering (Holtzman et al., 2019)
-- Dynamically selects the smallest set of tokens whose cumulative probability exceeds threshold $p \in (0, 1]$:
+- Dynamically selects the smallest set of tokens whose cumulative probability reaches threshold $p \in (0, 1]$:
 
 $$\sum_{i \in V^{(p)}} p_i \ge p$$
 
