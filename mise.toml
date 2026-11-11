@@ -1,3 +1,4 @@
 # Documented exception: torch ships no cp315 wheels yet, so calc stays on 3.12.
 [tools]
 python = "3.12"
+uv = "0.13"
