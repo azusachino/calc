@@ -1,18 +1,32 @@
 name: CI
 
+# Pull requests and manual runs only: a merge to main re-ran the check its pull
+# request had just passed. Docs-only changes skip CI at the trigger.
 on:
   pull_request:
-  push:
-    branches: [main]
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   check:
     runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
       - uses: jdx/mise-action@v5
+      - uses: actions/cache@v6
+        with:
+          path: ~/.cache/uv
+          key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+          restore-keys: uv-${{ runner.os }}-
       - run: uv sync --locked
       - run: make check
