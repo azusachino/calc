@@ -1,4 +1,7 @@
 # Documented exception: torch ships no cp315 wheels yet, so calc stays on 3.12.
 [tools]
-python = "3.12"
+python = "3.14"
 uv = "0.13"
+
+[env]
+_.file = [".env.local", ".env"]

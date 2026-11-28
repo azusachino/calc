@@ -12,6 +12,7 @@ artifacts/
 
 # Environments
 .env
+.env.local
 
 # OS / editor
 .vs/
